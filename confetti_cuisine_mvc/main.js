@@ -42,52 +42,29 @@ router.put("/users/:id/update", usersController.update, usersController.redirect
 router.get("/users/:id", usersController.show, usersController.showView);
 router.delete("/users/:id/delete", usersController.delete, usersController.redirectView);
 
+//Subscribers routes...
+router.get( '/subscribers', subscribersController.index, subscribersController.indexView );
+router.get( '/subscribers/new', subscribersController.new );
+router.post( '/subscribers/create', subscribersController.create, subscribersController.redirectView );
+router.get( '/subscribers/:id/edit', subscribersController.edit );
+router.put( '/subscribers/:id/update', subscribersController.update, subscribersController.redirectView );
+router.get( '/subscribers/:id', subscribersController.show, subscribersController.showView );
+router.delete( '/subscribers/:id/delete', subscribersController.delete, subscribersController.redirectView );
 
+//Courses routes...
+router.get( '/courses', coursesController.index, coursesController.indexView );
+router.get( '/courses/new', coursesController.new );
+router.post( '/courses/create', coursesController.create, coursesController.redirectView );
+router.get( '/courses/:id/edit', coursesController.edit );
+router.put( '/courses/:id/update', coursesController.update, coursesController.redirectView );
+router.get( '/courses/:id', coursesController.show, coursesController.showView );
+router.delete( '/courses/:id/delete', coursesController.delete, coursesController.redirectView );
 
+router.use( errorController.pageNotFoundError );
+router.use( errorController.internalServerError );
 
+app.use( '/', router );
 
-
-
-
-
-
-
-
-
-
-
-const express = require("express"),
- homeController = require("./controllers/homeController.js"),
- errorController = require("./controllers/errorController.js"),
- subscribersController = require("./controllers/subscribersController.js"),
- layouts = require("express-ejs-layouts"),
- mongoose = require("mongoose"),
- app = express();
-
- //Connect to ddbb and create confetti_cuisine if not exists
- mongoose.connect("mongodb://localhost:27017/confetti_cuisine");
-
-//Setting variables
-app.set("port", process.env.PORT || 3000);
-app.set("view engine", "ejs");
-app.use(express.urlencoded({
-    extended: false
-}));
-app.use(express.json());
-app.use(layouts);
-app.use(express.static("public"));
-
-//Routes...
-app.get("/", homeController.showHomePage);
-app.get("/courses", homeController.showCourses);
-app.get("/subscribers", subscribersController.getAllSubscribers);
-app.get("/contact", subscribersController.getSubscriptionPage);
-app.post("/subscribe", subscribersController.saveSubscriber);
-
-//Middleware...
-app.use(errorController.pageNotFoundError);
-app.use(errorController.internalServerError);
-
-app.listen(app.get("port"), () => {
-    console.log(`Server running at http:localhost:${app.get("port")}`);
-});
+app.listen( app.get( 'port' ), () => {
+  console.log( `Server running at http://localhost:${app.get('port')}` );
+} );
